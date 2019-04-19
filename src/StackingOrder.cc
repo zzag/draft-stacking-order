@@ -26,7 +26,7 @@ void StackingOrder::remove(Toplevel *toplevel)
         Constraint *constraint = m_constraints[i];
         const bool isBelow = (constraint->below == toplevel);
         const bool isAbove = (constraint->above == toplevel);
-        if (!isBelow && !isAbove) {
+        if (!isBelow || !isAbove) {
             continue;
         }
         if (isBelow) {
