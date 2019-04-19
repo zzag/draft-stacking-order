@@ -5,6 +5,7 @@
 
 // Qt
 #include <QObject>
+#include <QVector>
 
 namespace KWin
 {
@@ -87,6 +88,20 @@ Q_SIGNALS:
     void changed();
 
 private:
+    void evaluateConstraints();
+    void evaluateLayers();
+
+    ToplevelList m_toplevels;
+
+    struct Constraint
+    {
+        Toplevel *below;
+        Toplevel *above;
+        QVector<Constraint *> parents;
+        QVector<Constraint *> children;
+    };
+    QVector<Constraint *> m_constraints;
+
     Q_DISABLE_COPY(StackingOrder)
 };
 
