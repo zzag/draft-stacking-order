@@ -188,8 +188,8 @@ void StackingOrder::evaluateConstraints()
         const int belowIndex = m_toplevels.indexOf(constraint->below);
         const int aboveIndex = m_toplevels.indexOf(constraint->above);
         if (belowIndex > aboveIndex) {
-            m_toplevels.insert(belowIndex, constraint->above);
             m_toplevels.removeAt(aboveIndex);
+            m_toplevels.insert(belowIndex, constraint->above);
         }
 
         for (Constraint *child : constraint->children) {
