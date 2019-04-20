@@ -1,5 +1,8 @@
 #include "StackingOrder.h"
 
+// Qt
+#include <QQueue>
+
 namespace KWin
 {
 
@@ -150,6 +153,40 @@ ToplevelList StackingOrder::toplevels() const
 
 void StackingOrder::evaluateConstraints()
 {
+    if (m_constraints.isEmpty()) {
+        return;
+    }
+
+    QQueue<Constraint *> constraints;
+    constraints.reserve(m_constraints.count());
+
+    for (Constraint *constraint : m_constraints) {
+        if (constraint->parents.isEmpty()) {
+            constraint->enqueued = true;
+            constraints << constraint;
+        } else {
+            constraint->enqueued = false;
+        }
+    }
+
+    while (!constraints.isEmpty()) {
+        Constraint *constraint = constraints.dequeue();
+
+        const int belowIndex = m_toplevels.indexOf(constraint->below);
+        const int aboveIndex = m_toplevels.indexOf(constraint->above);
+        if (belowIndex > aboveIndex) {
+            m_toplevels.insert(belowIndex, constraint->above);
+            m_toplevels.removeAt(aboveIndex);
+        }
+
+        for (Constraint *child : constraint->children) {
+            if (constraint->enqueued) {
+                continue;
+            }
+            child->enqueued = true;
+            constraints << child;
+        }
+    }
 }
 
 void StackingOrder::evaluateLayers()

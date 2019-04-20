@@ -99,6 +99,9 @@ private:
         Toplevel *above;
         QVector<Constraint *> parents;
         QVector<Constraint *> children;
+
+        // Used to prevent cycles.
+        bool enqueued = false;
     };
     QVector<Constraint *> m_constraints;
 
