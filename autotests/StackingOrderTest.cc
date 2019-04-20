@@ -16,6 +16,7 @@ private Q_SLOTS:
     void testAddRemove();
     void testReplace();
     void testConstrain();
+    void testLayers();
 };
 
 void StackingOrderTest::testAddRemove()
@@ -76,6 +77,24 @@ void StackingOrderTest::testConstrain()
     stackingOrder->constrain(toplevelC.data(), toplevelA.data());
     stackingOrder->rebuild();
     QCOMPARE(stackingOrder->toplevels(), (ToplevelList{ toplevelB.data(), toplevelC.data(), toplevelA.data() }));
+}
+
+void StackingOrderTest::testLayers()
+{
+    QScopedPointer<StackingOrder> stackingOrder(new StackingOrder());
+    QScopedPointer<Toplevel> toplevelA(new Toplevel());
+    QScopedPointer<Toplevel> toplevelB(new Toplevel());
+    QScopedPointer<Toplevel> toplevelC(new Toplevel());
+
+    toplevelA->setLayer(AboveLayer);
+    toplevelB->setLayer(NormalLayer);
+    toplevelC->setLayer(BelowLayer);
+
+    stackingOrder->add(toplevelA.data());
+    stackingOrder->add(toplevelB.data());
+    stackingOrder->add(toplevelC.data());
+    stackingOrder->rebuild();
+    QCOMPARE(stackingOrder->toplevels(), (ToplevelList{ toplevelC.data(), toplevelB.data(), toplevelA.data() }));
 }
 
 QTEST_GUILESS_MAIN(StackingOrderTest)
