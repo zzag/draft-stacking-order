@@ -152,6 +152,18 @@ ToplevelList StackingOrder::toplevels() const
     return m_toplevels;
 }
 
+void StackingOrder::rebuild()
+{
+    const ToplevelList old = m_toplevels;
+
+    evaluateLayers();
+    evaluateConstraints();
+
+    if (old != m_toplevels) {
+        emit changed();
+    }
+}
+
 void StackingOrder::evaluateConstraints()
 {
     if (m_constraints.isEmpty()) {

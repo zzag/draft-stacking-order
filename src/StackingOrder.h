@@ -81,6 +81,11 @@ public:
      **/
     ToplevelList toplevels() const;
 
+    /**
+     *
+     **/
+    void rebuild();
+
 Q_SIGNALS:
     /**
      * Emitted when the stacking order has changed.
