@@ -12,4 +12,14 @@ Toplevel::~Toplevel()
 {
 }
 
+Layer Toplevel::layer() const
+{
+    return m_layer;
+}
+
+void Toplevel::setLayer(Layer layer)
+{
+    m_layer = layer;
+}
+
 } // namespace KWin

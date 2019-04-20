@@ -1,4 +1,5 @@
 #include "StackingOrder.h"
+#include "Toplevel.h"
 
 // Qt
 #include <QQueue>
@@ -189,8 +190,48 @@ void StackingOrder::evaluateConstraints()
     }
 }
 
+// static Layer computeLayer(const Client *client)
+// {
+//     Layer layer = client->layer();
+//
+//     const Group *group = client->group();
+//     if (!group) {
+//         return layer;
+//     }
+//
+//     const ClientList members = group->members();
+//     for (const Client *member : members) {
+//         if (member == client) {
+//             continue;
+//         }
+//         if (member->screen() != client->screen()) {
+//             continue;
+//         }
+//         if (member->layer() > layer) {
+//             layer = member->layer();
+//         }
+//     }
+//
+//     return layer;
+// }
+
+static Layer computeLayer(const Toplevel *toplevel)
+{
+    return toplevel->layer();
+}
+
 void StackingOrder::evaluateLayers()
 {
+    ToplevelList toplevels[NumLayers];
+    for (Toplevel *toplevel : m_toplevels) {
+        const Layer layer = computeLayer(toplevel);
+        toplevels[layer] << toplevel;
+    }
+
+    m_toplevels.clear();
+    for (Layer layer = FirstLayer; layer < NumLayers; ++layer) {
+        m_toplevels += toplevels[layer];
+    }
 }
 
 } // namespace KWin
