@@ -83,6 +83,19 @@ void StackingOrder::restack(const ToplevelList &toplevels)
 
 void StackingOrder::restack(Toplevel *below, Toplevel *above)
 {
+//     const int belowPosition = below->stackPosition();
+//     const int abovePosition = above->stackPosition();
+//     if (belowPosition < abovePosition) {
+//         return;
+//     }
+//
+//     m_toplevels.removeAt(abovePosition);
+//     m_toplevels.insert(belowPosition, above);
+//
+//     for (int i = abovePosition; i <= belowPosition; ++i) {
+//         m_toplevels[i]->setStackPosition(i);
+//     }
+
     Q_UNUSED(below)
     Q_UNUSED(above)
 }
