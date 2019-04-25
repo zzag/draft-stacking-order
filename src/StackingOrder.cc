@@ -216,6 +216,8 @@ void StackingOrder::evaluateConstraints()
 // {
 //     Layer layer = client->layer();
 //
+//     // TODO: Check if the client has transient parent.
+//
 //     const Group *group = client->group();
 //     if (!group) {
 //         return layer;
