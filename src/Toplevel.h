@@ -23,6 +23,10 @@ public:
     void setLayer(Layer layer);
 
 private:
+    /**
+     * Used internally by the StackingOrder class.
+     * @internal
+     **/
     int stackPosition() const;
     void setStackPosition(int position);
 
