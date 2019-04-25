@@ -75,7 +75,7 @@ public:
     void unconstrain(Toplevel *below, Toplevel *above);
 
     /**
-     * Returns toplevels in this StackingOrder.
+     * Returns toplevels in the StackingOrder.
      *
      * @todo More doc.
      **/
