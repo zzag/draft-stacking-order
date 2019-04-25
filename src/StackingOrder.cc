@@ -212,11 +212,24 @@ void StackingOrder::evaluateConstraints()
     }
 }
 
+// static bool isLayerPromotable(const Client *client)
+// {
+//     switch (client->windowType()) {
+//     case NET::Dialog:
+//     case NET::Utility:
+//         return true;
+//     default:
+//         return false;
+//     }
+// }
+
 // static Layer computeLayer(const Client *client)
 // {
 //     Layer layer = client->layer();
 //
-//     // TODO: Check if the client has transient parent.
+//     if (!isLayerPromotable(client)) {
+//         return layer;
+//     }
 //
 //     const Group *group = client->group();
 //     if (!group) {
