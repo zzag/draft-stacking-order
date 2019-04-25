@@ -22,4 +22,14 @@ void Toplevel::setLayer(Layer layer)
     m_layer = layer;
 }
 
+int Toplevel::stackPosition() const
+{
+    return m_stackPosition;
+}
+
+void Toplevel::setStackPosition(int position)
+{
+    m_stackPosition = position;
+}
+
 } // namespace KWin

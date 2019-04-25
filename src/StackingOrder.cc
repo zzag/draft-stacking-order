@@ -19,12 +19,15 @@ StackingOrder::~StackingOrder()
 
 void StackingOrder::add(Toplevel *toplevel)
 {
+    toplevel->setStackPosition(m_toplevels.count());
     m_toplevels << toplevel;
 }
 
 void StackingOrder::remove(Toplevel *toplevel)
 {
-    m_toplevels.removeOne(toplevel);
+    const int position = toplevel->stackPosition();
+    m_toplevels.removeAt(position);
+    shift(position, m_toplevels.count());
 
     for (int i = m_constraints.count() - 1; i >= 0; --i) {
         Constraint *constraint = m_constraints[i];
@@ -48,10 +51,10 @@ void StackingOrder::remove(Toplevel *toplevel)
 
 void StackingOrder::replace(Toplevel *before, Toplevel *after)
 {
-    const int index = m_toplevels.indexOf(before);
-    Q_ASSERT(index != -1);
+    const int position = before->stackPosition();
 
-    m_toplevels[index] = after;
+    after->setStackPosition(position);
+    m_toplevels[position] = after;
 
     for (Constraint *constraint : m_constraints) {
         if (constraint->below == before) {
@@ -83,21 +86,16 @@ void StackingOrder::restack(const ToplevelList &toplevels)
 
 void StackingOrder::restack(Toplevel *below, Toplevel *above)
 {
-//     const int belowPosition = below->stackPosition();
-//     const int abovePosition = above->stackPosition();
-//     if (belowPosition < abovePosition) {
-//         return;
-//     }
-//
-//     m_toplevels.removeAt(abovePosition);
-//     m_toplevels.insert(belowPosition, above);
-//
-//     for (int i = abovePosition; i <= belowPosition; ++i) {
-//         m_toplevels[i]->setStackPosition(i);
-//     }
+    const int belowPosition = below->stackPosition();
+    const int abovePosition = above->stackPosition();
+    if (belowPosition < abovePosition) {
+        return;
+    }
 
-    Q_UNUSED(below)
-    Q_UNUSED(above)
+    m_toplevels.removeAt(abovePosition);
+    m_toplevels.insert(belowPosition, above);
+
+    shift(abovePosition, belowPosition + 1);
 }
 
 void StackingOrder::constrain(Toplevel *below, Toplevel *above)
@@ -202,12 +200,7 @@ void StackingOrder::evaluateConstraints()
     while (!constraints.isEmpty()) {
         Constraint *constraint = constraints.dequeue();
 
-        const int belowIndex = m_toplevels.indexOf(constraint->below);
-        const int aboveIndex = m_toplevels.indexOf(constraint->above);
-        if (belowIndex > aboveIndex) {
-            m_toplevels.removeAt(aboveIndex);
-            m_toplevels.insert(belowIndex, constraint->above);
-        }
+        restack(constraint->below, constraint->above);
 
         for (Constraint *child : constraint->children) {
             if (constraint->enqueued) {
@@ -246,9 +239,9 @@ void StackingOrder::evaluateConstraints()
 
 static Layer computeLayer(const Toplevel *toplevel)
 {
-//     if (auto client = qobject_cast<const Client *>(toplevel)) {
-//         return computeLayer(client);
-//     }
+    // if (auto client = qobject_cast<const Client *>(toplevel)) {
+    //     return computeLayer(client);
+    // }
 
     return toplevel->layer();
 }
@@ -264,6 +257,15 @@ void StackingOrder::evaluateLayers()
     m_toplevels.clear();
     for (Layer layer = FirstLayer; layer < NumLayers; ++layer) {
         m_toplevels += toplevels[layer];
+    }
+
+    shift(0, m_toplevels.count());
+}
+
+void StackingOrder::shift(int start, int end)
+{
+    for (int i = start; i < end; ++i) {
+        m_toplevels[i]->setStackPosition(i);
     }
 }
 
