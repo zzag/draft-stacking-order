@@ -233,6 +233,10 @@ void StackingOrder::evaluateConstraints()
 
 static Layer computeLayer(const Toplevel *toplevel)
 {
+//     if (auto client = qobject_cast<const Client *>(toplevel)) {
+//         return computeLayer(client);
+//     }
+
     return toplevel->layer();
 }
 
