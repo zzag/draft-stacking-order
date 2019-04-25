@@ -263,7 +263,7 @@ static Layer computeLayer(const Toplevel *toplevel)
 
 void StackingOrder::evaluateLayers()
 {
-    ToplevelList toplevels[NumLayers];
+    std::array<ToplevelList, NumLayers> toplevels;
     for (Toplevel *toplevel : m_toplevels) {
         const Layer layer = computeLayer(toplevel);
         toplevels[layer] << toplevel;
