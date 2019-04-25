@@ -74,7 +74,11 @@ void StackingOrder::lower(Toplevel *toplevel)
 
 void StackingOrder::restack(const ToplevelList &toplevels)
 {
-    Q_UNUSED(toplevels)
+    for (int i = 0; i < toplevels.count() - 1; ++i) {
+        Toplevel *below = toplevels.at(i);
+        Toplevel *above = toplevels.at(i + 1);
+        restack(below, above);
+    }
 }
 
 void StackingOrder::restack(Toplevel *below, Toplevel *above)
