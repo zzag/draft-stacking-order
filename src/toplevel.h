@@ -3,6 +3,9 @@
 // Own
 #include "utils.h"
 
+// KF
+#include <NETWM>
+
 // Qt
 #include <QObject>
 
@@ -22,6 +25,12 @@ public:
     Layer layer() const;
     void setLayer(Layer layer);
 
+    int screen() const;
+    void setScreen(int screen);
+
+    NET::WindowType windowType() const;
+    void setWindowType(NET::WindowType type);
+
 private:
     /**
      * Used internally by the StackingOrder class.
@@ -31,7 +40,9 @@ private:
     void setStackPosition(int position);
 
     int m_stackPosition = -1;
+    int m_screen = 0;
     Layer m_layer = NormalLayer;
+    NET::WindowType m_windowType = NET::Normal;
 
     friend class StackingOrder;
 

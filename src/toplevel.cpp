@@ -1,4 +1,4 @@
-#include "Toplevel.h"
+#include "toplevel.h"
 
 namespace KWin
 {
@@ -20,6 +20,26 @@ Layer Toplevel::layer() const
 void Toplevel::setLayer(Layer layer)
 {
     m_layer = layer;
+}
+
+int Toplevel::screen() const
+{
+    return m_screen;
+}
+
+void Toplevel::setScreen(int screen)
+{
+    m_screen = screen;
+}
+
+NET::WindowType Toplevel::windowType() const
+{
+    return m_windowType;
+}
+
+void Toplevel::setWindowType(NET::WindowType type)
+{
+    m_windowType = type;
 }
 
 int Toplevel::stackPosition() const

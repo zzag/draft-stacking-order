@@ -20,6 +20,10 @@ find_package(Qt5 REQUIRED COMPONENTS
     Test
 )
 
+find_package(KF5 REQUIRED COMPONENTS
+    WindowSystem
+)
+
 add_subdirectory(autotests)
 add_subdirectory(src)
 

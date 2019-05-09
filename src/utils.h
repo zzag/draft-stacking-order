@@ -6,7 +6,10 @@
 namespace KWin
 {
 
+class Client;
 class Toplevel;
+
+typedef QList<Client *> ClientList;
 typedef QList<Toplevel *> ToplevelList;
 
 enum Layer {

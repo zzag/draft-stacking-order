@@ -1,6 +1,6 @@
 // Own
-#include "StackingOrder.h"
-#include "Toplevel.h"
+#include "stacking_order.h"
+#include "toplevel.h"
 
 // Qt
 #include <QScopedPointer>

@@ -1,5 +1,7 @@
-#include "StackingOrder.h"
-#include "Toplevel.h"
+#include "stacking_order.h"
+#include "client.h"
+#include "group.h"
+#include "toplevel.h"
 
 // Qt
 #include <QQueue>
@@ -255,51 +257,51 @@ void StackingOrder::evaluateConstraints()
     }
 }
 
-// static bool isLayerPromotable(const Client *client)
-// {
-//     switch (client->windowType()) {
-//     case NET::Dialog:
-//     case NET::Utility:
-//         return true;
-//     default:
-//         return false;
-//     }
-// }
+static bool isLayerPromotable(const Client *client)
+{
+    switch (client->windowType()) {
+    case NET::Dialog:
+    case NET::Utility:
+        return true;
+    default:
+        return false;
+    }
+}
 
-// static Layer computeLayer(const Client *client)
-// {
-//     Layer layer = client->layer();
-//
-//     if (!isLayerPromotable(client)) {
-//         return layer;
-//     }
-//
-//     const Group *group = client->group();
-//     if (!group) {
-//         return layer;
-//     }
-//
-//     const ClientList members = group->members();
-//     for (const Client *member : members) {
-//         if (member == client) {
-//             continue;
-//         }
-//         if (member->screen() != client->screen()) {
-//             continue;
-//         }
-//         if (member->layer() > layer) {
-//             layer = member->layer();
-//         }
-//     }
-//
-//     return layer;
-// }
+static Layer computeLayer(const Client *client)
+{
+    Layer layer = client->layer();
+
+    if (!isLayerPromotable(client)) {
+        return layer;
+    }
+
+    const Group *group = client->group();
+    if (!group) {
+        return layer;
+    }
+
+    const ClientList members = group->members();
+    for (const Client *member : members) {
+        if (member == client) {
+            continue;
+        }
+        if (member->screen() != client->screen()) {
+            continue;
+        }
+        if (member->layer() > layer) {
+            layer = member->layer();
+        }
+    }
+
+    return layer;
+}
 
 static Layer computeLayer(const Toplevel *toplevel)
 {
-    // if (auto client = qobject_cast<const Client *>(toplevel)) {
-    //     return computeLayer(client);
-    // }
+    if (auto client = qobject_cast<const Client *>(toplevel)) {
+        return computeLayer(client);
+    }
 
     return toplevel->layer();
 }
