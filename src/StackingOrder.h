@@ -124,7 +124,7 @@ Q_SIGNALS:
 private:
     void evaluateConstraints();
     void evaluateLayers();
-    void shift(int start, int end);
+    void fixUp(int start, int end);
 
     ToplevelList m_toplevels;
 

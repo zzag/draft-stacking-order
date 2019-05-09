@@ -27,7 +27,7 @@ void StackingOrder::remove(Toplevel *toplevel)
 {
     const int position = toplevel->stackPosition();
     m_toplevels.removeAt(position);
-    shift(position, m_toplevels.count());
+    fixUp(position, m_toplevels.count());
 
     for (int i = m_constraints.count() - 1; i >= 0; --i) {
         Constraint *constraint = m_constraints[i];
@@ -101,7 +101,7 @@ void StackingOrder::restack(Toplevel *below, Toplevel *above)
     m_toplevels.removeAt(abovePosition);
     m_toplevels.insert(belowPosition, above);
 
-    shift(abovePosition, belowPosition + 1);
+    fixUp(abovePosition, belowPosition + 1);
 }
 
 void StackingOrder::constrain(Toplevel *below, Toplevel *above)
@@ -316,10 +316,10 @@ void StackingOrder::evaluateLayers()
         m_toplevels += toplevels[layer];
     }
 
-    shift(0, m_toplevels.count());
+    fixUp(0, m_toplevels.count());
 }
 
-void StackingOrder::shift(int start, int end)
+void StackingOrder::fixUp(int start, int end)
 {
     for (int i = start; i < end; ++i) {
         m_toplevels[i]->setStackPosition(i);
