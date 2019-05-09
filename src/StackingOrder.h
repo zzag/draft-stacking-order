@@ -69,14 +69,14 @@ public:
     /**
      * Moves given Toplevel to the top of its layer.
      *
-     * @todo More doc.
+     * @param toplevel A toplevel to be raised.
      **/
     void raise(Toplevel *toplevel);
 
     /**
      * Moves given Toplevel to the bottom of its layer.
      *
-     * @todo More doc.
+     * @param toplevel A toplevel to be lowered.
      **/
     void lower(Toplevel *toplevel);
 
@@ -101,7 +101,10 @@ public:
     void unconstrain(Toplevel *below, Toplevel *above);
 
     /**
-     * Returns toplevels in the StackingOrder.
+     * Returns toplevels in the stacking order.
+     *
+     * The first value corresponds to the bottom-most toplevel, and the last
+     * value corresponds to the top-most toplevel.
      **/
     ToplevelList toplevels() const;
 
