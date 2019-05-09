@@ -27,19 +27,42 @@ public:
     /**
      * Adds given Toplevel to the StackingOrder.
      *
-     * @todo More doc.
+     * The toplevel will be placed at the top of the layer it belongs to.
+     *
+     * Addition of a toplevel that is already present in the stacking order will
+     * lead to undefined behavior.
+     *
+     * @param toplevel A toplevel to be added to the stacking order.
      **/
     void add(Toplevel *toplevel);
 
     /**
      * Removes given Toplevel from the StackingOrder.
      *
-     * @todo More doc.
+     * If there exist constraints that are applied to the given toplevel, then
+     * they will be removed together with it. So, calling unconstrain() method
+     * is optional.
+     *
+     * It's a fatal error to remove a toplevel that is not in the stacking order.
+     *
+     * @param toplevel A toplevel to be removed from the stacking order.
      **/
     void remove(Toplevel *toplevel);
 
     /**
+     * Replaces the given toplevel with another one.
      *
+     * Eventually a toplevel(e.g. Client, Unmanaged, etc) will become Deleted.
+     * Deleted exists solely for animation purposes, e.g. fade out closed window,
+     * etc. Given that those two are completely different objects, we need to
+     * swap them directly in the stacking order to preserve stack position as
+     * well applied constraints.
+     *
+     * Replacing a toplevel that is not part of the stacking order will lead
+     * to a fatal error.
+     *
+     * @param before A toplevel to be replaced.
+     * @param after The replacement.
      **/
     void replace(Toplevel *before, Toplevel *after);
 
