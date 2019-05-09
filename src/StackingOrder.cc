@@ -194,7 +194,8 @@ Toplevel *StackingOrder::findTopMost(Layer layer)
 
 Toplevel *StackingOrder::findTopMost(std::function<bool(const Toplevel *)> filter)
 {
-    for (Toplevel *toplevel : m_toplevels) {
+    for (int i = m_toplevels.count() - 1; i >= 0; --i) {
+        Toplevel *toplevel = m_toplevels.at(i);
         if (filter(toplevel)) {
             return toplevel;
         }
