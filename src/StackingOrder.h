@@ -14,7 +14,17 @@ namespace KWin
 {
 
 /**
+ * This class is responsibe for maintaining the stacking order.
  *
+ * Every toplevel has a layer assigned to it. Currently, there are 10 layers, from
+ * bottom to top: desktop layer, below layer, normal layer, dock layer, above layer,
+ * notification layer, active layer (used for placing fullscreen clients), critical
+ * notifications layer, on screen display layer, and unmanaged layer. For more
+ * details please take a look at Layer enum.
+ *
+ * The layer a toplevel is in depends on the window type, and some other things,
+ * like whether the window is active. In rare cases, a client can be promoted to
+ * upper layers if it's a dialog or an utility.
  **/
 class Q_DECL_EXPORT StackingOrder : public QObject
 {
@@ -25,7 +35,7 @@ public:
     ~StackingOrder() override;
 
     /**
-     * Adds given Toplevel to the StackingOrder.
+     * Adds the given toplevel to the stacking order.
      *
      * The toplevel will be placed at the top of the layer it belongs to.
      *
@@ -37,7 +47,7 @@ public:
     void add(Toplevel *toplevel);
 
     /**
-     * Removes given Toplevel from the StackingOrder.
+     * Removes the given toplevel from the stacking order.
      *
      * If there exist constraints that are applied to the given toplevel, then
      * they will be removed together with it. So, calling unconstrain() method
@@ -67,7 +77,7 @@ public:
     void replace(Toplevel *before, Toplevel *after);
 
     /**
-     * Moves given Toplevel to the top of its layer.
+     * Moves the given toplevel to the top of its layer.
      *
      * If the toplevel is a subject to constraints, then it's possible that two
      * or more toplevels will be raised together with @p toplevel.
@@ -77,29 +87,38 @@ public:
     void raise(Toplevel *toplevel);
 
     /**
-     * Moves given Toplevel to the bottom of its layer.
+     * Moves the given toplevel to the bottom of its layer.
      *
      * @param toplevel A toplevel to be lowered.
      **/
     void lower(Toplevel *toplevel);
 
     /**
+     * Restacks toplevels according to the specified order.
      *
+     * If some of toplevels are constrained, then the desired order might be not
+     * completely preserved.
+     *
+     * @param toplevels Desired order of toplevels.
      **/
     void restack(const ToplevelList &toplevels);
 
     /**
+     * Restacks one toplevel below the other one.
      *
+     * This method does nothing if @p below is already below @p above.
+     *
+     * It's a fatal error if any of two toplevels is not in the stacking order.
      **/
     void restack(Toplevel *below, Toplevel *above);
 
     /**
-     * Creates a below-above constraint for the given two toplevels.
+     * Creates a below-above constraint between the given two toplevels.
      *
      * This method adds a constraint that ensures @p below will be always kept
      * below @p above until unconstrain() method is called. The main difference
-     * between this method and restack() is that the latter applies below-above
-     * constraint only once.
+     * between this method and restack() is that the latter has temporary effect,
+     * while the former has permanent effect.
      *
      * @param below A toplevel that has to be kept below @c above.
      * @param above A toplevel that has to be kept above @c below.
@@ -107,7 +126,7 @@ public:
     void constrain(Toplevel *below, Toplevel *above);
 
     /**
-     * Breaks below-above constraint for the given two toplevels.
+     * Breaks below-above constraint between the given two toplevels.
      *
      * It is safe to call this method if there is no such a constraint between
      * @p below and @p above.
