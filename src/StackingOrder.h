@@ -7,6 +7,9 @@
 #include <QObject>
 #include <QVector>
 
+// std
+#include <functional>
+
 namespace KWin
 {
 
@@ -76,8 +79,6 @@ public:
 
     /**
      * Returns toplevels in the StackingOrder.
-     *
-     * @todo More doc.
      **/
     ToplevelList toplevels() const;
 
@@ -85,6 +86,16 @@ public:
      *
      **/
     void rebuild();
+
+    /**
+     * Returns top-most toplevel that satisfies given @p filter.
+     **/
+    Toplevel *findTopMost(std::function<bool(const Toplevel *)> filter);
+
+    /**
+     * Returns bottom-most toplevel that satisfies given @p filter.
+     **/
+    Toplevel *findBottomMost(std::function<bool(const Toplevel *)> filter);
 
 Q_SIGNALS:
     /**

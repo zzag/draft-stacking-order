@@ -179,6 +179,28 @@ void StackingOrder::rebuild()
     }
 }
 
+Toplevel *StackingOrder::findTopMost(std::function<bool(const Toplevel *)> filter)
+{
+    for (Toplevel *toplevel : m_toplevels) {
+        if (filter(toplevel)) {
+            return toplevel;
+        }
+    }
+
+    return nullptr;
+}
+
+Toplevel *StackingOrder::findBottomMost(std::function<bool(const Toplevel *)> filter)
+{
+    for (Toplevel *toplevel : m_toplevels) {
+        if (filter(toplevel)) {
+            return toplevel;
+        }
+    }
+
+    return nullptr;
+}
+
 void StackingOrder::evaluateConstraints()
 {
     if (m_constraints.isEmpty()) {
