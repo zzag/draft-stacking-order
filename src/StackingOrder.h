@@ -89,21 +89,29 @@ public:
 
     /**
      * Returns the top-most toplevel in the given @p layer.
+     *
+     * If there is no such a toplevel, @c null will be returned.
      **/
     Toplevel *findTopMost(Layer layer);
 
     /**
      * Returns the top-most toplevel that satisfies given @p filter.
+     *
+     * If there is no such a toplevel, @c null will be returned.
      **/
     Toplevel *findTopMost(std::function<bool(const Toplevel *)> filter);
 
     /**
      * Returns the bottom-most toplevel in the given @p layer.
+     *
+     * If there is no such a toplevel, @c null will be returned.
      **/
     Toplevel *findBottomMost(Layer layer);
 
     /**
      * Returns the bottom-most toplevel that satisfies given @p filter.
+     *
+     * If there is no such a toplevel, @c null will be returned.
      **/
     Toplevel *findBottomMost(std::function<bool(const Toplevel *)> filter);
 
