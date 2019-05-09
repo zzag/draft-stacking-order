@@ -69,6 +69,9 @@ public:
     /**
      * Moves given Toplevel to the top of its layer.
      *
+     * If the toplevel is a subject to constraints, then it's possible that two
+     * or more toplevels will be raised together with @p toplevel.
+     *
      * @param toplevel A toplevel to be raised.
      **/
     void raise(Toplevel *toplevel);
@@ -91,12 +94,23 @@ public:
     void restack(Toplevel *below, Toplevel *above);
 
     /**
+     * Creates a below-above constraint for the given two toplevels.
      *
+     * This method adds a constraint that ensures @p below will be always kept
+     * below @p above until unconstrain() method is called. The main difference
+     * between this method and restack() is that the latter applies below-above
+     * constraint only once.
+     *
+     * @param below A toplevel that has to be kept below @c above.
+     * @param above A toplevel that has to be kept above @c below.
      **/
     void constrain(Toplevel *below, Toplevel *above);
 
     /**
+     * Breaks below-above constraint for the given two toplevels.
      *
+     * It is safe to call this method if there is no such a constraint between
+     * @p below and @p above.
      **/
     void unconstrain(Toplevel *below, Toplevel *above);
 
