@@ -88,12 +88,22 @@ public:
     void rebuild();
 
     /**
-     * Returns top-most toplevel that satisfies given @p filter.
+     * Returns the top-most toplevel in the given @p layer.
+     **/
+    Toplevel *findTopMost(Layer layer);
+
+    /**
+     * Returns the top-most toplevel that satisfies given @p filter.
      **/
     Toplevel *findTopMost(std::function<bool(const Toplevel *)> filter);
 
     /**
-     * Returns bottom-most toplevel that satisfies given @p filter.
+     * Returns the bottom-most toplevel in the given @p layer.
+     **/
+    Toplevel *findBottomMost(Layer layer);
+
+    /**
+     * Returns the bottom-most toplevel that satisfies given @p filter.
      **/
     Toplevel *findBottomMost(std::function<bool(const Toplevel *)> filter);
 

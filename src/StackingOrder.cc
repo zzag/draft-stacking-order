@@ -67,12 +67,18 @@ void StackingOrder::replace(Toplevel *before, Toplevel *after)
 
 void StackingOrder::raise(Toplevel *toplevel)
 {
-    Q_UNUSED(toplevel)
+    Toplevel *topMost = findTopMost(toplevel->layer());
+    if (topMost != toplevel) {
+        restack(topMost, toplevel);
+    }
 }
 
 void StackingOrder::lower(Toplevel *toplevel)
 {
-    Q_UNUSED(toplevel)
+    Toplevel *bottomMost = findBottomMost(toplevel->layer());
+    if (bottomMost != toplevel) {
+        restack(toplevel, bottomMost);
+    }
 }
 
 void StackingOrder::restack(const ToplevelList &toplevels)
@@ -179,6 +185,13 @@ void StackingOrder::rebuild()
     }
 }
 
+Toplevel *StackingOrder::findTopMost(Layer layer)
+{
+    return findTopMost([layer](const Toplevel *toplevel) {
+        return toplevel->layer() == layer;
+    });
+}
+
 Toplevel *StackingOrder::findTopMost(std::function<bool(const Toplevel *)> filter)
 {
     for (Toplevel *toplevel : m_toplevels) {
@@ -188,6 +201,13 @@ Toplevel *StackingOrder::findTopMost(std::function<bool(const Toplevel *)> filte
     }
 
     return nullptr;
+}
+
+Toplevel *StackingOrder::findBottomMost(Layer layer)
+{
+    return findBottomMost([layer](const Toplevel *toplevel) {
+        return toplevel->layer() == layer;
+    });
 }
 
 Toplevel *StackingOrder::findBottomMost(std::function<bool(const Toplevel *)> filter)
